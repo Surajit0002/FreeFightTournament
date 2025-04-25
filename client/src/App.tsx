@@ -16,6 +16,7 @@ import DashboardPage from "@/pages/dashboard-page";
 import WalletPage from "@/pages/wallet-page";
 import ProfilePage from "@/pages/profile-page";
 import TeamPage from "@/pages/team-page";
+import AdminPage from "@/pages/admin-page";
 
 function Router() {
   return (
@@ -33,6 +34,7 @@ function Router() {
       <ProtectedRoute path="/wallet" component={WalletPage} />
       <ProtectedRoute path="/profile" component={ProfilePage} />
       <ProtectedRoute path="/team" component={TeamPage} />
+      <ProtectedRoute path="/admin" component={AdminPage} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />
