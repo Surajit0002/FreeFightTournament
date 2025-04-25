@@ -104,7 +104,7 @@ export default function TeamPage() {
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  
+
   // Forms setup
   const createTeamForm = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
@@ -114,21 +114,21 @@ export default function TeamPage() {
       description: ""
     }
   });
-  
+
   const inviteMemberForm = useForm<z.infer<typeof inviteMemberSchema>>({
     resolver: zodResolver(inviteMemberSchema),
     defaultValues: {
       username: ""
     }
   });
-  
+
   // API query, showing sample data for UI mockup
   const { data: teams, isLoading } = useQuery<Team[]>({
     queryKey: ['/api/user/teams'],
     enabled: !!user,
     initialData: SAMPLE_TEAMS
   });
-  
+
   // API mutations
   const createTeamMutation = useMutation({
     mutationFn: async (data: z.infer<typeof createTeamSchema>) => {
@@ -152,7 +152,7 @@ export default function TeamPage() {
       });
     }
   });
-  
+
   const inviteMemberMutation = useMutation({
     mutationFn: async (data: z.infer<typeof inviteMemberSchema>) => {
       if (!selectedTeam) throw new Error("No team selected");
@@ -176,16 +176,16 @@ export default function TeamPage() {
       });
     }
   });
-  
+
   // Form handlers
   const onCreateTeamSubmit = (data: z.infer<typeof createTeamSchema>) => {
     createTeamMutation.mutate(data);
   };
-  
+
   const onInviteMemberSubmit = (data: z.infer<typeof inviteMemberSchema>) => {
     inviteMemberMutation.mutate(data);
   };
-  
+
   // Helper functions
   const getRoleIcon = (role: string) => {
     switch (role) {
@@ -201,10 +201,10 @@ export default function TeamPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      
+
       <main className="flex-grow container mx-auto px-4 pt-24 pb-24">
         <h1 className="text-3xl font-bold font-orbitron mb-6">Team Management</h1>
-        
+
         {!user ? (
           <div className="glassmorphic p-6 text-center">
             <h2 className="text-xl font-bold mb-4">Login Required</h2>
@@ -248,8 +248,8 @@ export default function TeamPage() {
                             <div>
                               <h3 className="font-medium">{team.name}</h3>
                               <p className="text-xs text-muted-foreground">
-                                {team.members.length} members • 
-                                {team.ownerId === user.id ? ' Owner' : ' Member'}
+                                {team.members?.length || 0} members • 
+                                {team.ownerId === user?.id ? ' Owner' : ' Member'}
                               </p>
                             </div>
                           </div>
@@ -267,7 +267,7 @@ export default function TeamPage() {
                 </CardContent>
               </Card>
             </div>
-            
+
             {/* Team Details Panel */}
             <div className="lg:col-span-2">
               {selectedTeam ? (
@@ -290,7 +290,7 @@ export default function TeamPage() {
                           </div>
                         </div>
                       </div>
-                      
+
                       {selectedTeam.ownerId === user?.id && (
                         <div className="flex space-x-2">
                           <Button size="sm" className="gap-1" onClick={() => setInviteDialogOpen(true)}>
@@ -304,13 +304,13 @@ export default function TeamPage() {
                         </div>
                       )}
                     </div>
-                    
+
                     {selectedTeam.description && (
                       <div className="mb-6">
                         <p className="text-muted-foreground">{selectedTeam.description}</p>
                       </div>
                     )}
-                    
+
                     <Tabs defaultValue="members">
                       <TabsList className="mb-4">
                         <TabsTrigger value="members">Members</TabsTrigger>
@@ -318,7 +318,7 @@ export default function TeamPage() {
                         <TabsTrigger value="tournaments">Tournaments</TabsTrigger>
                         <TabsTrigger value="chat">Team Chat</TabsTrigger>
                       </TabsList>
-                      
+
                       <TabsContent value="members">
                         <h3 className="text-lg font-bold mb-4 font-rajdhani">Team Members</h3>
                         <div className="space-y-3">
@@ -341,7 +341,7 @@ export default function TeamPage() {
                                   </div>
                                 </div>
                               </div>
-                              
+
                               {selectedTeam.ownerId === user?.id && member.id !== user.id && (
                                 <Button size="sm" variant="ghost" className="text-destructive">
                                   <UserX className="h-4 w-4 mr-1" />
@@ -352,7 +352,7 @@ export default function TeamPage() {
                           ))}
                         </div>
                       </TabsContent>
-                      
+
                       <TabsContent value="stats">
                         <h3 className="text-lg font-bold mb-4 font-rajdhani">Team Statistics</h3>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -381,7 +381,7 @@ export default function TeamPage() {
                             </CardContent>
                           </Card>
                         </div>
-                        
+
                         <div className="mt-6">
                           <h4 className="font-medium mb-3">Win Rate</h4>
                           <div className="w-full h-4 bg-muted/30 rounded-full overflow-hidden">
@@ -394,7 +394,7 @@ export default function TeamPage() {
                             {Math.round((selectedTeam.stats.wins / selectedTeam.stats.matches) * 100)}%
                           </p>
                         </div>
-                        
+
                         <div className="mt-6">
                           <h4 className="font-medium mb-3">Average Kills Per Match</h4>
                           <p className="text-3xl font-rajdhani font-bold text-primary">
@@ -402,7 +402,7 @@ export default function TeamPage() {
                           </p>
                         </div>
                       </TabsContent>
-                      
+
                       <TabsContent value="tournaments">
                         <h3 className="text-lg font-bold mb-4 font-rajdhani">Recent Tournaments</h3>
                         <div className="space-y-3">
@@ -418,7 +418,7 @@ export default function TeamPage() {
                             </div>
                             <Badge className="bg-green-600">Registered</Badge>
                           </div>
-                          
+
                           <div className="p-4 rounded-md border border-border bg-muted/10 flex justify-between items-center">
                             <div className="flex items-center">
                               <div className="w-12 h-12 rounded-md bg-secondary/20 flex items-center justify-center mr-3">
@@ -431,7 +431,7 @@ export default function TeamPage() {
                             </div>
                             <Badge variant="outline">3rd Place</Badge>
                           </div>
-                          
+
                           <div className="p-4 rounded-md border border-border bg-muted/10 flex justify-between items-center">
                             <div className="flex items-center">
                               <div className="w-12 h-12 rounded-md bg-accent/20 flex items-center justify-center mr-3">
@@ -445,12 +445,12 @@ export default function TeamPage() {
                             <Badge variant="outline">5th Place</Badge>
                           </div>
                         </div>
-                        
+
                         <Button className="w-full mt-6">
                           View All Tournaments
                         </Button>
                       </TabsContent>
-                      
+
                       <TabsContent value="chat">
                         <h3 className="text-lg font-bold mb-4 font-rajdhani">Team Chat</h3>
                         <div className="h-64 border border-border rounded-md p-4 mb-4">
@@ -463,7 +463,7 @@ export default function TeamPage() {
                               <p>Everyone ready for tonight's match?</p>
                             </div>
                           </div>
-                          
+
                           <div className="flex items-start justify-end mb-4">
                             <div className="bg-primary/20 p-2 rounded-md rounded-tr-none">
                               <p className="text-xs text-muted-foreground mb-1">You</p>
@@ -473,13 +473,13 @@ export default function TeamPage() {
                               <AvatarFallback>{getDefaultAvatar(user?.username || "User")}</AvatarFallback>
                             </Avatar>
                           </div>
-                          
+
                           <div className="text-center text-xs text-muted-foreground my-2">
                             <Separator className="mb-2" />
                             <span>Today</span>
                             <Separator className="mt-2" />
                           </div>
-                          
+
                           <div className="flex items-start mb-4">
                             <Avatar className="mr-2">
                               <AvatarFallback>SK</AvatarFallback>
@@ -490,7 +490,7 @@ export default function TeamPage() {
                             </div>
                           </div>
                         </div>
-                        
+
                         <div className="flex gap-2">
                           <Input placeholder="Type your message..." className="flex-grow" />
                           <Button>
@@ -521,7 +521,7 @@ export default function TeamPage() {
           </div>
         )}
       </main>
-      
+
       {/* Create Team Dialog */}
       <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
         <DialogContent>
@@ -531,7 +531,7 @@ export default function TeamPage() {
               Form a squad to participate in team tournaments and climb the ranks together.
             </DialogDescription>
           </DialogHeader>
-          
+
           <Form {...createTeamForm}>
             <form onSubmit={createTeamForm.handleSubmit(onCreateTeamSubmit)} className="space-y-4">
               <FormField
@@ -550,7 +550,7 @@ export default function TeamPage() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={createTeamForm.control}
                 name="tag"
@@ -567,7 +567,7 @@ export default function TeamPage() {
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={createTeamForm.control}
                 name="description"
@@ -584,7 +584,7 @@ export default function TeamPage() {
                   </FormItem>
                 )}
               />
-              
+
               <DialogFooter>
                 <Button 
                   type="submit" 
@@ -598,7 +598,7 @@ export default function TeamPage() {
           </Form>
         </DialogContent>
       </Dialog>
-      
+
       {/* Invite Member Dialog */}
       <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
         <DialogContent>
@@ -608,7 +608,7 @@ export default function TeamPage() {
               Enter a player's username to invite them to your team.
             </DialogDescription>
           </DialogHeader>
-          
+
           <Form {...inviteMemberForm}>
             <form onSubmit={inviteMemberForm.handleSubmit(onInviteMemberSubmit)} className="space-y-4">
               <FormField
@@ -627,7 +627,7 @@ export default function TeamPage() {
                   </FormItem>
                 )}
               />
-              
+
               <DialogFooter>
                 <Button 
                   type="submit" 
@@ -641,7 +641,7 @@ export default function TeamPage() {
           </Form>
         </DialogContent>
       </Dialog>
-      
+
       <Footer />
       <MobileNavbar />
     </div>
