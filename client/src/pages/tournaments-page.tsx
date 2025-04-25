@@ -13,91 +13,166 @@ import { formatTimeLeft, getGameModeColor, getGameModeBgColor } from "@/lib/util
 import { Trophy, Calendar, Clock, Users, Search, MapPin, Coins, Filter, ChevronRight, Flame } from "lucide-react";
 import { useLocation } from "wouter";
 
+// Extended tournament type to include UI-specific fields
+interface ExtendedTournament extends Tournament {
+  currentParticipants: number;
+  banner?: string; // UI reference for banner image
+}
+
 // Sample tournament data based on the user's attached file
-const SAMPLE_TOURNAMENTS = [
+const SAMPLE_TOURNAMENTS: ExtendedTournament[] = [
   {
     id: 1,
     title: "🔥 Pro Squad Arena",
     description: "Compete with the best squads in an intense battle for supremacy. Top 3 teams win cash prizes!",
+    bannerImage: "/tournament-1.jpg",
     gameMode: "Squad",
     entryFee: 15,
     prizePool: 1000,
     mapName: "Bermuda",
     maxParticipants: 50,
-    currentParticipants: 36,
-    startTime: new Date(2025, 3, 27, 17, 0).toISOString(), // April 27, 5:00 PM
+    startTime: new Date(2025, 3, 27, 17, 0),
     status: "upcoming",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 36,
     banner: "/tournament-1.jpg"
   },
   {
     id: 2,
     title: "🎯 Sniper King Solo",
     description: "Show off your sniping skills in this solo competition. One shot, one kill!",
+    bannerImage: "/tournament-2.jpg",
     gameMode: "Solo",
     entryFee: 5,
     prizePool: 500,
     mapName: "Kalahari",
     maxParticipants: 100,
-    currentParticipants: 100,
-    startTime: new Date(2025, 3, 27, 14, 0).toISOString(), // April 27, 2:00 PM
+    startTime: new Date(2025, 3, 27, 14, 0),
     status: "full",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 100,
     banner: "/tournament-2.jpg"
   },
   {
     id: 3,
     title: "💥 Elite Duo Battle",
     description: "Find a partner and dominate the battlefield together. Strategy and teamwork are key!",
+    bannerImage: "/tournament-3.jpg",
     gameMode: "Duo",
     entryFee: 10,
     prizePool: 750,
     mapName: "Purgatory",
     maxParticipants: 100,
-    currentParticipants: 74,
-    startTime: new Date(2025, 3, 27, 15, 0).toISOString(), // April 27, 3:00 PM
+    startTime: new Date(2025, 3, 27, 15, 0),
     status: "upcoming",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 74,
     banner: "/tournament-3.jpg"
   },
   {
     id: 4,
     title: "⚡ Clash of Legends",
     description: "The ultimate battle royale experience with top players from across the region!",
+    bannerImage: "/tournament-4.jpg",
     gameMode: "Squad",
     entryFee: 20,
     prizePool: 2000,
     mapName: "Bermuda",
     maxParticipants: 75,
-    currentParticipants: 23,
-    startTime: new Date(2025, 3, 28, 18, 0).toISOString(), // April 28, 6:00 PM
+    startTime: new Date(2025, 3, 28, 18, 0),
     status: "upcoming",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 23,
     banner: "/tournament-4.jpg"
   },
   {
     id: 5,
     title: "🔫 Quick Draw Showdown",
     description: "Fast-paced solo tournament with focus on quick reflexes and sharp shooting!",
+    bannerImage: "/tournament-5.jpg",
     gameMode: "Solo",
     entryFee: 8,
     prizePool: 600,
     mapName: "Kalahari",
     maxParticipants: 80,
-    currentParticipants: 45,
-    startTime: new Date(2025, 3, 28, 13, 0).toISOString(), // April 28, 1:00 PM
+    startTime: new Date(2025, 3, 28, 13, 0),
     status: "upcoming",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 45,
     banner: "/tournament-5.jpg"
   },
   {
     id: 6,
     title: "🚀 Booyah Blitz",
     description: "High intensity matches with shrinking safe zones and increased loot!",
+    bannerImage: "/tournament-6.jpg",
     gameMode: "Duo",
     entryFee: 12,
     prizePool: 800,
     mapName: "Purgatory",
     maxParticipants: 60,
-    currentParticipants: 60,
-    startTime: new Date(2025, 3, 26, 19, 0).toISOString(), // April 26, 7:00 PM
+    startTime: new Date(2025, 3, 26, 19, 0),
     status: "live",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 60,
     banner: "/tournament-6.jpg"
+  },
+  {
+    id: 7,
+    title: "🔥 Weekend Battle Royale",
+    description: "The biggest tournament of the season! Enter solo or as a squad and compete for massive prizes.",
+    bannerImage: "/tournament-7.jpg",
+    gameMode: "Squad",
+    entryFee: 25,
+    prizePool: 3000,
+    mapName: "Bermuda",
+    maxParticipants: 120,
+    startTime: new Date(2025, 3, 29, 20, 0),
+    status: "upcoming",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 87,
+    banner: "/tournament-7.jpg"
+  },
+  {
+    id: 8,
+    title: "⚔️ Guild War Series",
+    description: "Team-based competition where guilds battle for supremacy and season points!",
+    bannerImage: "/tournament-8.jpg",
+    gameMode: "Squad",
+    entryFee: 30,
+    prizePool: 2500,
+    mapName: "Kalahari",
+    maxParticipants: 50,
+    startTime: new Date(2025, 3, 30, 19, 0),
+    status: "upcoming",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 32,
+    banner: "/tournament-8.jpg"
+  },
+  {
+    id: 9,
+    title: "🏆 Masters Tournament",
+    description: "Invitation-only elite tournament featuring the best players in the region!",
+    bannerImage: "/tournament-9.jpg",
+    gameMode: "Solo",
+    entryFee: 0,
+    prizePool: 5000,
+    mapName: "Bermuda",
+    maxParticipants: 30,
+    startTime: new Date(2025, 4, 5, 18, 0),
+    status: "upcoming",
+    createdAt: new Date(),
+    createdBy: 1,
+    currentParticipants: 12,
+    banner: "/tournament-9.jpg"
   }
 ];
 
@@ -111,22 +186,24 @@ export default function TournamentsPage() {
   const [gameModeFilter, setGameModeFilter] = useState<GameModeFilterOptions>("all");
   
   // API query - using sample data for UI mockup
-  const { data: tournaments = SAMPLE_TOURNAMENTS, isLoading } = useQuery<Tournament[]>({
+  const { data: tournaments = SAMPLE_TOURNAMENTS, isLoading } = useQuery<ExtendedTournament[]>({
     queryKey: ['/api/tournaments'],
     initialData: SAMPLE_TOURNAMENTS
   });
   
   // Filter tournaments based on search query and filters
-  const filteredTournaments = tournaments.filter(tournament => {
+  const filteredTournaments = tournaments.filter((tournament: ExtendedTournament) => {
     // Search filter
-    const matchesSearch = tournament.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         tournament.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = 
+      tournament.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (tournament.description && tournament.description.toLowerCase().includes(searchQuery.toLowerCase()));
     
     // Status filter
-    const matchesStatus = statusFilter === "all" || 
-                         (statusFilter === "upcoming" && tournament.status === "upcoming") ||
-                         (statusFilter === "live" && tournament.status === "live") ||
-                         (statusFilter === "full" && tournament.currentParticipants >= tournament.maxParticipants);
+    const matchesStatus = 
+      statusFilter === "all" || 
+      (statusFilter === "upcoming" && tournament.status === "upcoming") ||
+      (statusFilter === "live" && tournament.status === "live") ||
+      (statusFilter === "full" && tournament.currentParticipants >= tournament.maxParticipants);
     
     // Game mode filter
     const matchesGameMode = gameModeFilter === "all" || tournament.gameMode === gameModeFilter;

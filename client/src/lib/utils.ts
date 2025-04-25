@@ -13,8 +13,8 @@ export function formatCurrency(amount: number): string {
   }).format(amount);
 }
 
-export function formatTimeLeft(dateString: string): string {
-  const targetDate = new Date(dateString);
+export function formatTimeLeft(date: Date | string): string {
+  const targetDate = typeof date === 'string' ? new Date(date) : date;
   const now = new Date();
   
   // Get the time difference in milliseconds
@@ -25,9 +25,14 @@ export function formatTimeLeft(dateString: string): string {
     return 'Started';
   }
   
-  // Calculate hours, minutes, and seconds
-  const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+  // Calculate days, hours, minutes
+  const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+  
+  if (days > 0) {
+    return `${days}d ${hours}h`;
+  }
   
   return `${hours}h ${minutes}m`;
 }
