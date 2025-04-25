@@ -1,0 +1,33 @@
+Design a full modern, mobile-first and responsive frontend UI/UX for a Free Fire eSports tournament platform. Use a dark gaming theme with neon accents (🔥🟣🟡), futuristic fonts, glowing UI elements, and high-quality gaming icons. Include strong call-to-actions and a user-friendly flow. Incorporate micro-interactions, smooth transitions, and game-style UI cards.
+
+Pages to design:
+1. 🏠 Home: Hero banner with a call-to-action “Join Now”, top tournaments carousel, user stats (🔥 50K+ players, 💰 ₹10L+ in prizes), and animated background.
+2. 🏆 Tournaments: Filterable list (Solo, Duo, Squad), search bar, card-based UI for each tournament showing entry fee (🪙), prize pool (💰), and join button.
+3. 📄 Tournament Details: Tournament banner, details, countdown ⏳, rules, participants avatars 👥, and a glowing “Join Tournament” button.
+4. 📈 Leaderboard: Player ranking list with avatars, medals 🥇🥈🥉, kills 🔫, and points.
+5. 🔐 Login/Register: Stylish auth UI with social login buttons, gaming avatars, and emoji-enhanced inputs.
+6. 🎮 Player Dashboard: Overview of joined tournaments, next match status, wallet balance (🪙 1230 Coins | 💸 ₹250), and notifications 🔔.
+7. 🖼️ Match Room: Room ID, password, timer, map preview 🗺️, and screenshot upload form.
+8. 💼 Wallet: Add coins, withdraw earnings, show transaction history with icons 💳📥📤.
+9. 👨‍👩‍👧‍👦 Team Management: Create team, invite members, view squad performance.
+10. 👑 Admin Panel: Create/manage tournaments, push match info, approve results, and view stats charts 📊.
+11. 🎯 Achievements & Badges: Unlockable badges with animations 🛡️🎖️.
+12. 💬 Notifications & Messages: Game-style popups and feed with scroll animation.
+13. 📱 Mobile version: Bottom tab navigation, quick join button, mobile-friendly cards and modals.
+14. ❓ FAQs, Contact, About, Terms: Clean info layout with icons 📞📃❓.
+
+Visual style:
+- Use bright neon colors (purple, yellow, cyan) on a dark/black background
+- Rounded glassmorphic cards and glowing buttons
+- Game-style icons and minimal emoji use in key UX areas
+- Include onboarding and guided flows (e.g., “First Time? We’ll help you join your first match 🔥”)
+- Smooth hover/active interactions, progress loaders, and modals
+- High contrast for readability and accessibility
+- Include animations like countdown timers, match starting alerts, and coin rain effects after a win 💸🎉
+
+Output:
+- Fully interactive mockup
+- Mobile + Desktop layouts
+- All icons embedded or sourced (Feather, Lucide, or custom)
+- Wireframes → Hi-fi designs with clickable prototype
+

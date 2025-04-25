@@ -1,0 +1,359 @@
+🌐 Public Pages (No Login Required)
+Home
+
+Tournaments
+
+Tournament Details
+
+Leaderboard
+
+How to Play / Rules
+
+About Us
+
+Contact Us
+
+FAQs
+
+Terms & Conditions
+
+Privacy Policy
+
+🔐 Authentication Pages
+Login
+
+Register
+
+Forgot Password
+
+Reset Password
+
+OTP Verification (if needed)
+
+🧑‍💻 User Dashboard Pages
+Dashboard Overview
+
+My Tournaments (Joined)
+
+Match Details
+
+Upload Match Screenshot
+
+Match Result Status
+
+Create Team / Squad
+
+Invite Players
+
+Wallet
+
+Withdraw Request
+
+Deposit / Add Coins
+
+Transaction History
+
+Achievements / Badges
+
+Referral & Earnings
+
+Notifications
+
+My Profile
+
+Edit Profile
+
+Settings (Dark Mode, Language, etc.)
+
+Support / Help Ticket
+
+🧑‍🏫 Admin Panel Pages (Frontend Only)
+Admin Dashboard
+
+Create Tournament
+
+Manage Tournaments
+
+View Participants
+
+Start Match
+
+Update Match Results
+
+Manage Users
+
+Manage Teams
+
+Payment Requests
+
+Manage Banners / Announcements
+
+Push Notifications
+
+Analytics / Site Stats
+
+📱 Mobile-Specific Pages (optional)
+Bottom Navigation Layout
+
+Tournament Quick Join (Popup)
+
+Live Match View (Mobile-optimized)
+
+Would you like a visual sitemap or wireframe-style breakdown next?
+
+
+
+
+
+
+
+You said:
+create each page details 
+
+
+ChatGPT said:
+Absolutely! Here is a detailed breakdown of each page for your Free Fire Tournament website frontend. This includes the purpose, key sections, and suggested components for each page.
+
+🌐 PUBLIC PAGES (NO LOGIN)
+1. Home
+Purpose: Attract users and show off tournaments.
+
+Sections:
+
+Hero banner with CTA to join
+
+Top Tournaments carousel
+
+Upcoming matches list
+
+Platform stats (players, matches, rewards)
+
+Testimonials / Reviews
+
+Footer with links
+
+2. Tournaments
+Purpose: List all tournaments.
+
+Sections:
+
+Filter (mode, entry fee, prize pool, status)
+
+Search bar
+
+Tournament cards (Title, Mode, Entry, Prize, Join/Details)
+
+3. Tournament Details
+Purpose: Show full info on a selected tournament.
+
+Sections:
+
+Banner with tournament image
+
+Info: Game mode, prize pool, entry fee
+
+Rules & Instructions
+
+Slots/Participants with avatars
+
+Countdown to start
+
+Join Now button
+
+4. Leaderboard
+Purpose: Show top players and teams.
+
+Sections:
+
+Daily / Weekly / Monthly tabs
+
+Player ranking table (Name, Wins, Kills, Points)
+
+Badges
+
+5. How to Play / Rules
+Purpose: Explain how users can join and play.
+
+Sections:
+
+Step-by-step guide
+
+Entry rules, cheating policy
+
+Win & scoring rules
+
+Uploading match proof
+
+6. About Us
+Purpose: Explain your platform's story and mission.
+
+Sections:
+
+About Free Fire tournaments
+
+Why choose this platform?
+
+Team info (optional)
+
+Social links
+
+7. Contact Us
+Purpose: Let users send messages or questions.
+
+Sections:
+
+Contact form (name, email, message)
+
+Support email
+
+Social media links
+
+8. FAQs
+Purpose: Answer common questions.
+
+Sections:
+
+Accordion UI (e.g. “How to join?”, “How to withdraw?”)
+
+9. Terms & Conditions
+Legal policy on using the platform.
+
+10. Privacy Policy
+Policy on user data handling.
+
+🔐 AUTH PAGES
+11. Login
+Inputs: email/username, password
+
+Remember me, forgot password
+
+12. Register
+Inputs: username, email, password, confirm password
+
+Optional: referral code
+
+13. Forgot Password
+Email input + Send Reset Link
+
+14. Reset Password
+New password + confirm
+
+15. OTP Verification
+4/6 digit input
+
+👤 USER DASHBOARD
+16. Dashboard Overview
+Quick view of wallet, tournaments joined, next match
+
+Notifications panel
+
+17. My Tournaments
+Joined tournament list
+
+Status: upcoming / ongoing / completed
+
+18. Match Details
+Match room ID, password, time, instructions
+
+19. Upload Match Screenshot
+Upload form with image preview
+
+20. Match Result Status
+Result card with: Win/Loss, Kills, Points
+
+21. Create Team
+Team name input
+
+Invite players (via ID or username)
+
+22. Invite Players
+Invite by sharing code or link
+
+23. Wallet
+Coin/cash balance
+
+Earned from wins/referrals
+
+24. Withdraw Request
+Form to request payout (Paytm/UPI/etc.)
+
+25. Deposit/Add Coins
+Amount input + Payment methods
+
+26. Transaction History
+List of deposits, withdrawals, and rewards
+
+27. Achievements / Badges
+Display unlocked achievements
+
+28. Referral & Earnings
+Referral link
+
+Referral earnings and invite status
+
+29. Notifications
+Match reminders, admin updates, results
+
+30. My Profile
+User data, stats, match history
+
+31. Edit Profile
+Form to edit avatar, name, bio, contact info
+
+32. Settings
+Dark mode, language, etc.
+
+33. Support / Help Ticket
+Form to raise a support issue
+
+🧑‍🏫 ADMIN PANEL (Frontend Only)
+34. Admin Dashboard
+Stats: active users, tournaments, revenue
+
+35. Create Tournament
+Form: Title, entry, mode, prize, time, banner
+
+36. Manage Tournaments
+Edit/delete tournaments
+
+Start/stop match status
+
+37. View Participants
+List of registered users for a match
+
+38. Start Match
+Generate Room ID/Password
+
+Notify participants
+
+39. Update Match Results
+Form to input kills and rankings
+
+40. Manage Users
+Ban, warn, promote players
+
+41. Manage Teams
+View, edit, delete teams
+
+42. Payment Requests
+View and approve/deny withdrawal requests
+
+43. Manage Banners / Announcements
+Update homepage banners, tournament notices
+
+44. Push Notifications
+Create site-wide notices
+
+45. Analytics
+Charts for players, matches, revenue over time
+
+📱 MOBILE PAGES (UI Focused)
+46. Bottom Navigation
+Home, Tournaments, Wallet, Notifications, Profile
+
+47. Tournament Quick Join
+One-tap access to next available match
+
+48. Live Match View
+Display live match info (dummy for now)
+
