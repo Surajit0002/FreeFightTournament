@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  
+  /* Neon accents */
+  --primary: 265 83% 64%; /* purple */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 48 96% 53%; /* yellow */
+  --secondary-foreground: 0 0% 0%;
+  --accent: 187 100% 42%; /* cyan */
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 265 83% 64%;
+  
+  --radius: 0.5rem;
+  
+  /* Charts */
+  --chart-1: 265 83% 64%;
+  --chart-2: 48 96% 53%;
+  --chart-3: 187 100% 42%;
+  --chart-4: 324 70% 45%;
+  --chart-5: 78 65% 55%;
+  
+  /* Sidebar */
+  --sidebar-background: 222 47% 11%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-primary: 265 83% 64%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 48 96% 53%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-border: 217 33% 17%;
+  --sidebar-ring: 265 83% 64%;
+}
+
+/* Only light theme (default is dark) */
+.light {
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215 16% 47%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --primary: 265 83% 64%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 48 96% 53%;
+  --secondary-foreground: 0 0% 0%;
+  --accent: 187 100% 42%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 265 83% 64%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  h1, h2, h3, h4 {
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .font-rajdhani {
+    font-family: 'Rajdhani', sans-serif;
+  }
+  
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .glassmorphic {
+    @apply bg-black/30 backdrop-blur-md border border-primary/30 rounded-xl;
+  }
+  
+  .text-shadow-purple {
+    text-shadow: 0 0 10px theme('colors.primary.DEFAULT');
+  }
+  
+  .text-shadow-yellow {
+    text-shadow: 0 0 10px theme('colors.secondary.DEFAULT');
+  }
+  
+  .text-shadow-cyan {
+    text-shadow: 0 0 10px theme('colors.accent.DEFAULT');
+  }
+  
+  .btn-glow {
+    @apply transition-all duration-300;
+  }
+  
+  .btn-glow:hover {
+    box-shadow: 0 0 15px theme('colors.primary.DEFAULT');
+  }
+  
+  .border-glow {
+    box-shadow: 0 0 5px theme('colors.primary.DEFAULT');
+  }
+  
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 5px theme('colors.primary.DEFAULT'), 0 0 15px theme('colors.primary.DEFAULT');
+    }
+    50% {
+      box-shadow: 0 0 15px theme('colors.primary.DEFAULT'), 0 0 25px theme('colors.primary.DEFAULT');
+    }
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
