@@ -324,4 +324,40 @@
   .glassmorphic-card {
     @apply bg-black/30 backdrop-blur-sm backdrop-filter border border-white/10 rounded-xl shadow-lg transition-all duration-300 hover:border-primary/30 hover:shadow-primary/20;
   }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .btn-3d {
+    @apply relative bg-primary text-white border-b-4 border-primary transition-all duration-150;
+  }
+  
+  .btn-3d:active {
+    @apply border-b-0 border-t-4 translate-y-[4px] transform;
+  }
+  
+  .neon-border {
+    @apply relative overflow-hidden;
+    box-shadow: 0 0 5px theme('colors.primary.DEFAULT'), 
+                0 0 10px theme('colors.primary.DEFAULT');
+  }
+  
+  .neon-border:hover {
+    box-shadow: 0 0 10px theme('colors.primary.DEFAULT'), 
+                0 0 20px theme('colors.primary.DEFAULT'), 
+                0 0 30px theme('colors.primary.DEFAULT');
+  }
 }
