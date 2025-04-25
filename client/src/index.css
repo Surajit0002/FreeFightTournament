@@ -320,4 +320,8 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  
+  .glassmorphic-card {
+    @apply bg-black/30 backdrop-blur-sm backdrop-filter border border-white/10 rounded-xl shadow-lg transition-all duration-300 hover:border-primary/30 hover:shadow-primary/20;
+  }
 }
