@@ -1,0 +1,85 @@
+Design and implement a rich, interactive frontend UI for a Free Fire Tournament platform using React.js (TypeScript), Tailwind CSS, and modern design principles. Focus on advanced Tournament Detail pages, dynamic Team Management, and multiple tournament cards. Use glowing neon theme with emojis, icons, and immersive micro-interactions. Include demo data.
+
+🎯 Page 1: Tournament Detail Page (Enhanced)
+- Layout with 3 tabs: Overview | Rules | Participants
+- Display:
+  - Tournament Banner & Title (🔥 Ultimate Squad Showdown)
+  - Game Mode: Squad, Solo, Duo (🎮)
+  - Entry Fee: 10 Coins (🪙)
+  - Prize Pool: ₹1,000 (💰)
+  - Start Time: ⏰ 26 April, 6:00 PM IST
+  - Map: Bermuda 🗺️
+  - Countdown Timer ⏳
+  - Remaining Slots: 23/50 filled
+  - Join Now Button with hover glow 🔥
+- Rules Section:
+  - Display kill score (1 Kill = 2 points), survival bonus, no emulators, etc.
+- Participants List:
+  - Avatars + Player/Team Names + Status (Joined ✅ / Waiting ⌛)
+- Room Info Popup (after match starts):
+  - Room ID, Password, Server, Spectate link
+
+🧑‍🤝‍🧑 Page 2: Team Management Page (Fully Featured)
+- Features:
+  - Create New Team (Team Name + Icon + Tagline)
+  - View My Teams
+  - Invite Members by Username or ID
+  - Team Member Cards:
+    - Avatar, Username, Role (Leader/Captain/Player)
+    - Remove / Promote / Kick actions
+  - Team Stats Section:
+    - Matches Played, Wins 🏆, Avg Kills 🔫, Team Rank
+  - Chat Box (in-team comms preview)
+  - Join Tournament as Team CTA 🔗
+  - UI: Dynamic list, collapsible team panel, glowing badges, hover effects
+
+📄 Page 3: Multiple Tournament Cards Section (Enhanced)
+- Display multiple tournament cards using demo data
+- Each card includes:
+  - 🔥 Title: "Sniper King Solo", "Elite Duo Battle", "Pro Squad Arena"
+  - Mode: Solo / Duo / Squad
+  - Entry Fee: Coins
+  - Prize: ₹500–₹10,000
+  - Slots: Filled/Total
+  - Join Now Button (disabled if full)
+  - Map Icon + Game Logo
+  - Animation on hover (scale, glow)
+  - Optional: “Live” badge for ongoing tournaments
+
+📦 Use Sample Data (JSON/JS format)
+```ts
+const tournaments = [
+  {
+    id: 1,
+    title: "🔥 Pro Squad Arena",
+    mode: "Squad",
+    entryFee: 15,
+    prizePool: 1000,
+    map: "Bermuda",
+    slotsFilled: 36,
+    totalSlots: 50,
+    time: "April 27, 5:00 PM IST",
+  },
+  {
+    id: 2,
+    title: "🎯 Sniper King Solo",
+    mode: "Solo",
+    entryFee: 5,
+    prizePool: 500,
+    map: "Kalahari",
+    slotsFilled: 100,
+    totalSlots: 100,
+    time: "April 27, 2:00 PM IST",
+  },
+  {
+    id: 3,
+    title: "💥 Elite Duo Battle",
+    mode: "Duo",
+    entryFee: 10,
+    prizePool: 750,
+    map: "Purgatory",
+    slotsFilled: 74,
+    totalSlots: 100,
+    time: "April 27, 3:00 PM IST",
+  },
+]

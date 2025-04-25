@@ -1,581 +1,646 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import Navbar from "@/components/layout/navbar";
 import MobileNavbar from "@/components/layout/mobile-navbar";
 import Footer from "@/components/layout/footer";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import { Trophy, UserPlus, Users, Plus, MessageSquare, UserX, Crown, Shield, Edit } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
-import { Team } from "@shared/schema";
-import { 
-  Users, UserPlus, Upload, Crown, Settings, 
-  Shield, Trophy, ShieldCheck, UserX
-} from "lucide-react";
 import { getDefaultAvatar } from "@/lib/utils";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+
+// Types for team management
+type TeamMember = {
+  id: number;
+  username: string;
+  role: "owner" | "captain" | "member";
+  avatar?: string;
+};
+
+type Team = {
+  id: number;
+  name: string;
+  tag: string;
+  description?: string;
+  logo?: string;
+  ownerId: number;
+  members: TeamMember[];
+  stats: {
+    matches: number;
+    wins: number;
+    kills: number;
+    rank: number;
+  };
+};
+
+// Sample data to show UI
+const SAMPLE_TEAMS: Team[] = [
+  {
+    id: 1,
+    name: "🔥 Pro Squad Arena",
+    tag: "PSA",
+    description: "We're a serious team focused on competitive tournaments and ranking up!",
+    ownerId: 1,
+    members: [
+      { id: 1, username: "kingcom", role: "owner" },
+      { id: 2, username: "HeadShot42", role: "captain" },
+      { id: 3, username: "SnipeKing", role: "member" },
+      { id: 4, username: "FireStorm", role: "member" }
+    ],
+    stats: {
+      matches: 36,
+      wins: 15,
+      kills: 245,
+      rank: 124
+    }
+  },
+  {
+    id: 2,
+    name: "💥 Elite Duo Battle",
+    tag: "EDB",
+    description: "Casual duo team for weekend tournaments",
+    ownerId: 1,
+    members: [
+      { id: 1, username: "kingcom", role: "owner" },
+      { id: 5, username: "ShadowPlayer", role: "member" }
+    ],
+    stats: {
+      matches: 12,
+      wins: 3,
+      kills: 78,
+      rank: 456
+    }
+  }
+];
+
+// Schema for team creation
+const createTeamSchema = z.object({
+  name: z.string().min(3, "Team name must be at least 3 characters").max(20, "Team name must be less than 20 characters"),
+  tag: z.string().min(2, "Team tag must be at least 2 characters").max(5, "Team tag must be less than 5 characters"),
+  description: z.string().max(200, "Description must be less than 200 characters").optional(),
+});
+
+// Schema for member invitation
+const inviteMemberSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+});
 
 export default function TeamPage() {
-  const { user } = useAuth();
   const { toast } = useToast();
-  const [newTeamName, setNewTeamName] = useState<string>("");
-  const [teamLogo, setTeamLogo] = useState<string>("");
-  const [inviteUsername, setInviteUsername] = useState<string>("");
+  const { user } = useAuth();
+  const [selectedTeam, setSelectedTeam] = useState<Team | null>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   
-  // Fetch user's teams
-  const { data: teams, isLoading: isLoadingTeams } = useQuery<Team[]>({
-    queryKey: ["/api/user/teams"],
+  // Forms setup
+  const createTeamForm = useForm<z.infer<typeof createTeamSchema>>({
+    resolver: zodResolver(createTeamSchema),
+    defaultValues: {
+      name: "",
+      tag: "",
+      description: ""
+    }
   });
   
-  // Team creation mutation
+  const inviteMemberForm = useForm<z.infer<typeof inviteMemberSchema>>({
+    resolver: zodResolver(inviteMemberSchema),
+    defaultValues: {
+      username: ""
+    }
+  });
+  
+  // API query, showing sample data for UI mockup
+  const { data: teams, isLoading } = useQuery<Team[]>({
+    queryKey: ['/api/user/teams'],
+    enabled: !!user,
+    initialData: SAMPLE_TEAMS
+  });
+  
+  // API mutations
   const createTeamMutation = useMutation({
-    mutationFn: async () => {
-      const res = await apiRequest("POST", "/api/teams", {
-        name: newTeamName,
-        logo: teamLogo,
-        ownerId: user?.id
-      });
+    mutationFn: async (data: z.infer<typeof createTeamSchema>) => {
+      const res = await apiRequest("POST", "/api/teams", data);
       return await res.json();
     },
     onSuccess: () => {
       toast({
-        title: "Team created",
-        description: `Team "${newTeamName}" has been created successfully`,
+        title: "Team created successfully",
+        description: "You can now invite members to your team"
       });
-      setNewTeamName("");
-      setTeamLogo("");
-      queryClient.invalidateQueries({
-        queryKey: ["/api/user/teams"],
-      });
+      setCreateDialogOpen(false);
+      createTeamForm.reset();
+      queryClient.invalidateQueries({ queryKey: ['/api/user/teams'] });
     },
     onError: (error: Error) => {
       toast({
-        title: "Team creation failed",
+        title: "Failed to create team",
         description: error.message,
-        variant: "destructive",
+        variant: "destructive"
       });
-    },
+    }
   });
   
-  // Team member invite mutation
   const inviteMemberMutation = useMutation({
-    mutationFn: async (teamId: number) => {
-      const res = await apiRequest("POST", `/api/teams/${teamId}/members`, {
-        username: inviteUsername,
-        role: "member"
-      });
+    mutationFn: async (data: z.infer<typeof inviteMemberSchema>) => {
+      if (!selectedTeam) throw new Error("No team selected");
+      const res = await apiRequest("POST", `/api/teams/${selectedTeam.id}/invite`, data);
       return await res.json();
     },
     onSuccess: () => {
       toast({
         title: "Invitation sent",
-        description: `Invitation sent to ${inviteUsername}`,
+        description: "Player will receive your team invitation"
       });
-      setInviteUsername("");
-      queryClient.invalidateQueries({
-        queryKey: ["/api/user/teams"],
-      });
+      setInviteDialogOpen(false);
+      inviteMemberForm.reset();
+      queryClient.invalidateQueries({ queryKey: ['/api/user/teams'] });
     },
     onError: (error: Error) => {
       toast({
-        title: "Invitation failed",
+        title: "Failed to invite member",
         description: error.message,
-        variant: "destructive",
+        variant: "destructive"
       });
-    },
+    }
   });
   
-  // Handle team creation
-  const handleCreateTeam = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTeamName.trim()) {
-      toast({
-        title: "Team name required",
-        description: "Please enter a team name",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    createTeamMutation.mutate();
+  // Form handlers
+  const onCreateTeamSubmit = (data: z.infer<typeof createTeamSchema>) => {
+    createTeamMutation.mutate(data);
   };
   
-  // Handle team logo change
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // In a real app, you would upload the file to your server or cloud storage
-      // and get back a URL to use as the logo
-      // For now, we'll just use a data URL
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (typeof event.target?.result === 'string') {
-          setTeamLogo(event.target.result);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
+  const onInviteMemberSubmit = (data: z.infer<typeof inviteMemberSchema>) => {
+    inviteMemberMutation.mutate(data);
   };
   
-  // Handle member invitation
-  const handleInviteMember = (teamId: number) => {
-    if (!inviteUsername.trim()) {
-      toast({
-        title: "Username required",
-        description: "Please enter a username to invite",
-        variant: "destructive",
-      });
-      return;
+  // Helper functions
+  const getRoleIcon = (role: string) => {
+    switch (role) {
+      case 'owner':
+        return <Crown className="h-4 w-4 text-secondary" />;
+      case 'captain':
+        return <Shield className="h-4 w-4 text-primary" />;
+      default:
+        return null;
     }
-    
-    inviteMemberMutation.mutate(teamId);
   };
-  
-  // Set page title
-  useEffect(() => {
-    document.title = "Team Management | FireFight";
-  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 pt-24 pb-24">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold font-orbitron mb-2 flex items-center">
-            <Users className="mr-3 text-primary h-8 w-8" />
-            Team Management
-          </h1>
-          <p className="text-muted-foreground">
-            Create, manage, and invite players to your teams
-          </p>
-        </div>
+        <h1 className="text-3xl font-bold font-orbitron mb-6">Team Management</h1>
         
-        {/* Team Management Interface */}
-        <Tabs defaultValue="myTeams" className="mb-8">
-          <TabsList className="mb-6">
-            <TabsTrigger value="myTeams">My Teams</TabsTrigger>
-            <TabsTrigger value="createTeam">Create Team</TabsTrigger>
-            <TabsTrigger value="invitations">Invitations</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="myTeams">
-            {isLoadingTeams ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <Card key={index} className="bg-background/60 border-primary/30 backdrop-blur-sm">
-                    <div className="h-48 bg-background/30 animate-pulse" />
-                    <CardContent className="p-6">
-                      <div className="h-4 bg-background/30 rounded w-3/4 mb-4 animate-pulse" />
-                      <div className="h-3 bg-background/30 rounded w-1/2 mb-6 animate-pulse" />
-                      <div className="flex space-x-2 mb-4">
-                        <div className="h-8 w-8 rounded-full bg-background/30 animate-pulse" />
-                        <div className="h-8 w-8 rounded-full bg-background/30 animate-pulse" />
-                        <div className="h-8 w-8 rounded-full bg-background/30 animate-pulse" />
-                      </div>
-                      <div className="h-10 bg-background/30 rounded animate-pulse" />
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : teams && teams.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {teams.map((team) => (
-                  <Card key={team.id} className="bg-background/60 border-primary/30 backdrop-blur-sm overflow-hidden">
-                    <div className="h-48 relative">
-                      {/* Team banner with gradient background */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30" />
-                      
-                      {/* Team logo overlay */}
-                      {team.logo ? (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <img 
-                            src={team.logo} 
-                            alt={team.name} 
-                            className="max-h-32 max-w-32"
-                          />
-                        </div>
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="w-24 h-24 rounded-full bg-background/60 border-2 border-primary flex items-center justify-center">
-                            <span className="text-3xl font-bold font-rajdhani">
-                              {team.name.substring(0, 2).toUpperCase()}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Overlay gradient */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                      
-                      {/* Team name overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4">
-                        <h2 className="text-2xl font-bold font-rajdhani text-white">
-                          {team.name}
-                        </h2>
-                        {team.ownerId === user?.id && (
-                          <p className="flex items-center text-sm text-secondary">
-                            <Crown className="h-4 w-4 mr-1 text-secondary" /> You are the Team Owner
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <CardContent className="p-6">
-                      <h3 className="font-medium mb-3">Team Members</h3>
-                      
-                      {/* Mock team members - in a real app, fetch these from API */}
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        <div className="flex items-center">
-                          <div className="relative">
-                            <Avatar className="h-8 w-8 border border-primary">
-                              <AvatarImage src={user && getDefaultAvatar(user.username)} alt={user?.username} />
-                              <AvatarFallback className="bg-primary/20 text-primary text-xs">
-                                {user?.username?.substring(0, 2).toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            {team.ownerId === user?.id && (
-                              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-secondary flex items-center justify-center">
-                                <Crown className="h-2.5 w-2.5 text-black" />
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* Sample additional members - in a real app, map over actual members */}
-                        <Avatar className="h-8 w-8 border border-primary/50">
-                          <AvatarFallback className="bg-primary/20 text-primary text-xs">TM</AvatarFallback>
-                        </Avatar>
-                        <Avatar className="h-8 w-8 border border-primary/50">
-                          <AvatarFallback className="bg-primary/20 text-primary text-xs">DP</AvatarFallback>
-                        </Avatar>
-                        <Avatar className="h-8 w-8 border border-primary/50 opacity-50">
-                          <AvatarFallback className="bg-primary/10 text-primary text-xs">+</AvatarFallback>
-                        </Avatar>
-                      </div>
-                      
-                      {/* Team Actions */}
-                      <div className="space-y-2">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button variant="outline" className="w-full flex items-center border-primary/30 hover:border-primary/60">
-                              <UserPlus className="h-4 w-4 mr-2" /> Invite Players
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-md">
-                            <DialogHeader>
-                              <DialogTitle>Invite Players</DialogTitle>
-                              <DialogDescription>
-                                Enter the username of the player you want to invite to {team.name}
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="space-y-4 py-4">
-                              <div className="flex items-center space-x-2">
-                                <div className="grid flex-1 gap-2">
-                                  <Input 
-                                    placeholder="Username" 
-                                    value={inviteUsername} 
-                                    onChange={(e) => setInviteUsername(e.target.value)}
-                                    className="bg-card border-primary/30"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <DialogFooter>
-                              <Button 
-                                onClick={() => handleInviteMember(team.id)}
-                                disabled={inviteMemberMutation.isPending || !inviteUsername.trim()}
-                              >
-                                {inviteMemberMutation.isPending ? 'Sending...' : 'Send Invite'}
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </Dialog>
-                        
-                        {team.ownerId === user?.id && (
-                          <Button variant="outline" className="w-full flex items-center border-secondary/30 hover:border-secondary/60">
-                            <Settings className="h-4 w-4 mr-2" /> Manage Team
-                          </Button>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <h3 className="text-lg font-bold mb-2">No teams yet</h3>
-                <p className="text-muted-foreground mb-4">
-                  You haven't created or joined any teams yet. Create a team to participate in duo and squad tournaments!
-                </p>
-                <Button onClick={() => document.getElementById('create-team-tab')?.click()}>
-                  Create a Team
-                </Button>
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="createTeam" id="create-team-tab">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="bg-background/60 border-primary/30 backdrop-blur-sm">
-                <CardHeader>
-                  <CardTitle className="font-rajdhani flex items-center">
-                    <Shield className="h-5 w-5 mr-2 text-primary" /> 
-                    Create a New Team
-                  </CardTitle>
-                  <CardDescription>
-                    Form your squad and compete in tournaments together
-                  </CardDescription>
+        {!user ? (
+          <div className="glassmorphic p-6 text-center">
+            <h2 className="text-xl font-bold mb-4">Login Required</h2>
+            <p className="text-muted-foreground mb-4">You need to login to view and manage your teams</p>
+            <Button onClick={() => window.location.href = "/auth"}>Login / Register</Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Team Selection Panel */}
+            <div className="lg:col-span-1">
+              <Card className="glassmorphic">
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-xl font-rajdhani">My Teams</CardTitle>
+                  <Button size="sm" variant="default" onClick={() => setCreateDialogOpen(true)}>
+                    <Plus className="h-4 w-4 mr-1" /> Create Team
+                  </Button>
                 </CardHeader>
-                
                 <CardContent>
-                  <form onSubmit={handleCreateTeam} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Team Name
-                      </label>
-                      <Input 
-                        placeholder="Enter your team name"
-                        value={newTeamName}
-                        onChange={(e) => setNewTeamName(e.target.value)}
-                        className="bg-card border-primary/30"
-                      />
+                  {isLoading ? (
+                    <div className="space-y-3">
+                      {[1, 2, 3].map(i => (
+                        <div key={i} className="h-16 rounded-md bg-muted/30 animate-pulse"></div>
+                      ))}
                     </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Team Logo (Optional)
-                      </label>
-                      <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 rounded-full border-2 border-dashed border-primary/50 flex items-center justify-center overflow-hidden">
-                          {teamLogo ? (
-                            <img src={teamLogo} alt="Team Logo" className="w-full h-full object-cover" />
-                          ) : (
-                            <Upload className="h-6 w-6 text-primary/50" />
-                          )}
+                  ) : teams && teams.length > 0 ? (
+                    <div className="space-y-3">
+                      {teams.map(team => (
+                        <div 
+                          key={team.id}
+                          className={`p-3 rounded-md cursor-pointer transition-colors
+                            ${selectedTeam?.id === team.id 
+                              ? 'bg-primary/20 border border-primary/50' 
+                              : 'bg-card/80 hover:bg-muted/30 border border-transparent'
+                            }`}
+                          onClick={() => setSelectedTeam(team)}
+                        >
+                          <div className="flex items-center">
+                            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-3 text-primary font-bold">
+                              {team.tag}
+                            </div>
+                            <div>
+                              <h3 className="font-medium">{team.name}</h3>
+                              <p className="text-xs text-muted-foreground">
+                                {team.members.length} members • 
+                                {team.ownerId === user.id ? ' Owner' : ' Member'}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <label htmlFor="logo-upload" className="cursor-pointer">
-                            <Button type="button" variant="outline" size="sm" className="border-primary/30">
-                              <Upload className="h-4 w-4 mr-2" /> Upload Logo
-                            </Button>
-                            <input 
-                              id="logo-upload" 
-                              type="file" 
-                              accept="image/*" 
-                              onChange={handleLogoChange} 
-                              className="hidden"
-                            />
-                          </label>
-                          <p className="text-xs text-muted-foreground mt-2">
-                            Recommended: 200x200 px
-                          </p>
-                        </div>
-                      </div>
+                      ))}
                     </div>
-                    
-                    <CardFooter className="px-0 pt-4">
-                      <Button 
-                        type="submit" 
-                        className="w-full"
-                        disabled={createTeamMutation.isPending || !newTeamName.trim()}
-                      >
-                        {createTeamMutation.isPending ? 'Creating...' : 'Create Team'}
-                      </Button>
-                    </CardFooter>
-                  </form>
+                  ) : (
+                    <div className="text-center py-8">
+                      <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                      <h3 className="text-lg font-medium mb-2">No Teams Yet</h3>
+                      <p className="text-muted-foreground mb-4">Create a team to participate in squad tournaments</p>
+                      <Button onClick={() => setCreateDialogOpen(true)}>Create Your First Team</Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
-              
-              <div className="space-y-6">
-                <Card className="bg-background/60 border-primary/30 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle className="font-rajdhani text-lg">
-                      Team Benefits
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-3">
-                        <ShieldCheck className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Participate in Squad Tournaments</p>
-                        <p className="text-xs text-muted-foreground">
-                          Join squad tournaments with higher prize pools
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center mr-3">
-                        <Trophy className="h-5 w-5 text-secondary" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Team Leaderboard</p>
-                        <p className="text-xs text-muted-foreground">
-                          Climb the team rankings and earn recognition
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-3">
-                        <Users className="h-5 w-5 text-accent" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Team Communication</p>
-                        <p className="text-xs text-muted-foreground">
-                          Coordinate with your teammates easily
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card className="bg-background/60 border-primary/30 backdrop-blur-sm">
-                  <CardHeader>
-                    <CardTitle className="font-rajdhani text-lg">
-                      Team Requirements
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center mr-3">
-                        <span className="text-xs font-medium">1</span>
-                      </div>
-                      <p className="text-sm">Team names must not contain offensive language</p>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center mr-3">
-                        <span className="text-xs font-medium">2</span>
-                      </div>
-                      <p className="text-sm">A team can have up to 6 members (4 main + 2 subs)</p>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center mr-3">
-                        <span className="text-xs font-medium">3</span>
-                      </div>
-                      <p className="text-sm">Team members can be kicked by the team owner</p>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center mr-3">
-                        <span className="text-xs font-medium">4</span>
-                      </div>
-                      <p className="text-sm">A player can only be part of one team at a time</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
             </div>
-          </TabsContent>
-          
-          <TabsContent value="invitations">
-            <Card className="bg-background/60 border-primary/30 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="font-rajdhani">
-                  Team Invitations
-                </CardTitle>
-                <CardDescription>
-                  Invitations you've received to join other teams
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent>
-                {/* In a real app, fetch invitations from API */}
-                <div className="text-center py-8">
-                  <h3 className="text-lg font-bold mb-2">No invitations</h3>
-                  <p className="text-muted-foreground">
-                    You don't have any pending team invitations
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-        
-        {/* Team Stats (can be expanded in a real app) */}
-        <Card className="bg-background/60 border-primary/30 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="font-rajdhani flex items-center">
-              <Trophy className="h-5 w-5 mr-2 text-secondary" /> 
-              Team Statistics
-            </CardTitle>
-            <CardDescription>
-              View performance statistics for your teams
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent>
-            {isLoadingTeams ? (
-              <div className="h-32 bg-background/30 animate-pulse rounded-md" />
-            ) : teams && teams.length > 0 ? (
-              <div className="space-y-6">
-                {teams.map((team) => (
-                  <div key={team.id} className="space-y-4">
-                    <div className="flex items-center">
-                      <Avatar className="h-10 w-10 mr-3 border border-primary">
-                        {team.logo ? (
-                          <AvatarImage src={team.logo} alt={team.name} />
-                        ) : null}
-                        <AvatarFallback className="bg-primary/20 text-primary">
-                          {team.name.substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <h3 className="font-bold">{team.name}</h3>
+            
+            {/* Team Details Panel */}
+            <div className="lg:col-span-2">
+              {selectedTeam ? (
+                <Card className="glassmorphic">
+                  <CardContent className="p-6">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                      <div className="flex items-center mb-4 md:mb-0">
+                        <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mr-4 border-2 border-primary/50">
+                          <span className="font-bold text-2xl text-primary">{selectedTeam.tag}</span>
+                        </div>
+                        <div>
+                          <h2 className="text-2xl font-orbitron font-bold">{selectedTeam.name}</h2>
+                          <div className="flex items-center">
+                            <Badge variant="outline" className="mr-2">
+                              {selectedTeam.members.length} members
+                            </Badge>
+                            <Badge variant="secondary">
+                              #{selectedTeam.stats.rank} Rank
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {selectedTeam.ownerId === user?.id && (
+                        <div className="flex space-x-2">
+                          <Button size="sm" className="gap-1" onClick={() => setInviteDialogOpen(true)}>
+                            <UserPlus className="h-4 w-4" />
+                            Invite
+                          </Button>
+                          <Button size="sm" variant="outline" className="gap-1">
+                            <Edit className="h-4 w-4" />
+                            Edit
+                          </Button>
+                        </div>
+                      )}
                     </div>
                     
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="p-4 border border-primary/20 rounded-lg">
-                        <p className="text-sm text-muted-foreground">Tournaments</p>
-                        <p className="text-2xl font-bold font-rajdhani">5</p>
+                    {selectedTeam.description && (
+                      <div className="mb-6">
+                        <p className="text-muted-foreground">{selectedTeam.description}</p>
                       </div>
-                      
-                      <div className="p-4 border border-primary/20 rounded-lg">
-                        <p className="text-sm text-muted-foreground">Wins</p>
-                        <p className="text-2xl font-bold font-rajdhani text-secondary">2</p>
-                      </div>
-                      
-                      <div className="p-4 border border-primary/20 rounded-lg">
-                        <p className="text-sm text-muted-foreground">Win Rate</p>
-                        <p className="text-2xl font-bold font-rajdhani">40%</p>
-                      </div>
-                      
-                      <div className="p-4 border border-primary/20 rounded-lg">
-                        <p className="text-sm text-muted-foreground">Total Kills</p>
-                        <p className="text-2xl font-bold font-rajdhani text-accent">86</p>
-                      </div>
-                    </div>
+                    )}
                     
-                    <div className="flex justify-end">
-                      <Button variant="outline" size="sm" className="border-primary/30">
-                        View Detailed Stats
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <h3 className="text-lg font-bold mb-2">No team statistics</h3>
-                <p className="text-muted-foreground mb-4">
-                  Create or join a team to view team statistics
-                </p>
-                <Button onClick={() => document.getElementById('create-team-tab')?.click()}>
-                  Create a Team
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    <Tabs defaultValue="members">
+                      <TabsList className="mb-4">
+                        <TabsTrigger value="members">Members</TabsTrigger>
+                        <TabsTrigger value="stats">Stats</TabsTrigger>
+                        <TabsTrigger value="tournaments">Tournaments</TabsTrigger>
+                        <TabsTrigger value="chat">Team Chat</TabsTrigger>
+                      </TabsList>
+                      
+                      <TabsContent value="members">
+                        <h3 className="text-lg font-bold mb-4 font-rajdhani">Team Members</h3>
+                        <div className="space-y-3">
+                          {selectedTeam.members.map(member => (
+                            <div key={member.id} className="flex items-center justify-between p-3 rounded-md bg-muted/20 border border-border">
+                              <div className="flex items-center">
+                                <Avatar className="h-10 w-10 mr-3">
+                                  <AvatarImage src={member.avatar} />
+                                  <AvatarFallback>{getDefaultAvatar(member.username)}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <div className="flex items-center">
+                                    <h4 className="font-medium">{member.username}</h4>
+                                    <Badge className="ml-2" variant="outline">
+                                      <span className="flex items-center gap-1">
+                                        {getRoleIcon(member.role)}
+                                        <span className="capitalize">{member.role}</span>
+                                      </span>
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              {selectedTeam.ownerId === user?.id && member.id !== user.id && (
+                                <Button size="sm" variant="ghost" className="text-destructive">
+                                  <UserX className="h-4 w-4 mr-1" />
+                                  Remove
+                                </Button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </TabsContent>
+                      
+                      <TabsContent value="stats">
+                        <h3 className="text-lg font-bold mb-4 font-rajdhani">Team Statistics</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <Card>
+                            <CardContent className="p-4 text-center">
+                              <p className="text-xs text-muted-foreground">Matches</p>
+                              <p className="text-2xl font-bold">{selectedTeam.stats.matches}</p>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardContent className="p-4 text-center">
+                              <p className="text-xs text-muted-foreground">Wins</p>
+                              <p className="text-2xl font-bold text-secondary">{selectedTeam.stats.wins}</p>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardContent className="p-4 text-center">
+                              <p className="text-xs text-muted-foreground">Kills</p>
+                              <p className="text-2xl font-bold text-primary">{selectedTeam.stats.kills}</p>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardContent className="p-4 text-center">
+                              <p className="text-xs text-muted-foreground">Rank</p>
+                              <p className="text-2xl font-bold text-accent">#{selectedTeam.stats.rank}</p>
+                            </CardContent>
+                          </Card>
+                        </div>
+                        
+                        <div className="mt-6">
+                          <h4 className="font-medium mb-3">Win Rate</h4>
+                          <div className="w-full h-4 bg-muted/30 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-primary to-secondary" 
+                              style={{ width: `${(selectedTeam.stats.wins / selectedTeam.stats.matches) * 100}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-right text-sm text-muted-foreground mt-1">
+                            {Math.round((selectedTeam.stats.wins / selectedTeam.stats.matches) * 100)}%
+                          </p>
+                        </div>
+                        
+                        <div className="mt-6">
+                          <h4 className="font-medium mb-3">Average Kills Per Match</h4>
+                          <p className="text-3xl font-rajdhani font-bold text-primary">
+                            {(selectedTeam.stats.kills / selectedTeam.stats.matches).toFixed(1)}
+                          </p>
+                        </div>
+                      </TabsContent>
+                      
+                      <TabsContent value="tournaments">
+                        <h3 className="text-lg font-bold mb-4 font-rajdhani">Recent Tournaments</h3>
+                        <div className="space-y-3">
+                          <div className="p-4 rounded-md border border-border bg-muted/10 flex justify-between items-center">
+                            <div className="flex items-center">
+                              <div className="w-12 h-12 rounded-md bg-primary/20 flex items-center justify-center mr-3">
+                                <Trophy className="h-6 w-6 text-primary" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium">Pro Squad Championship</h4>
+                                <p className="text-xs text-muted-foreground">Upcoming • April 30, 8:00 PM</p>
+                              </div>
+                            </div>
+                            <Badge className="bg-green-600">Registered</Badge>
+                          </div>
+                          
+                          <div className="p-4 rounded-md border border-border bg-muted/10 flex justify-between items-center">
+                            <div className="flex items-center">
+                              <div className="w-12 h-12 rounded-md bg-secondary/20 flex items-center justify-center mr-3">
+                                <Trophy className="h-6 w-6 text-secondary" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium">Weekend Warfare</h4>
+                                <p className="text-xs text-muted-foreground">Completed • April 23, 2025</p>
+                              </div>
+                            </div>
+                            <Badge variant="outline">3rd Place</Badge>
+                          </div>
+                          
+                          <div className="p-4 rounded-md border border-border bg-muted/10 flex justify-between items-center">
+                            <div className="flex items-center">
+                              <div className="w-12 h-12 rounded-md bg-accent/20 flex items-center justify-center mr-3">
+                                <Trophy className="h-6 w-6 text-accent" />
+                              </div>
+                              <div>
+                                <h4 className="font-medium">Season Qualifier</h4>
+                                <p className="text-xs text-muted-foreground">Completed • April 16, 2025</p>
+                              </div>
+                            </div>
+                            <Badge variant="outline">5th Place</Badge>
+                          </div>
+                        </div>
+                        
+                        <Button className="w-full mt-6">
+                          View All Tournaments
+                        </Button>
+                      </TabsContent>
+                      
+                      <TabsContent value="chat">
+                        <h3 className="text-lg font-bold mb-4 font-rajdhani">Team Chat</h3>
+                        <div className="h-64 border border-border rounded-md p-4 mb-4">
+                          <div className="flex items-start mb-4">
+                            <Avatar className="mr-2">
+                              <AvatarFallback>HS</AvatarFallback>
+                            </Avatar>
+                            <div className="bg-muted p-2 rounded-md rounded-tl-none">
+                              <p className="text-xs text-muted-foreground mb-1">HeadShot42</p>
+                              <p>Everyone ready for tonight's match?</p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start justify-end mb-4">
+                            <div className="bg-primary/20 p-2 rounded-md rounded-tr-none">
+                              <p className="text-xs text-muted-foreground mb-1">You</p>
+                              <p>Yes, I'll be online at 8pm sharp!</p>
+                            </div>
+                            <Avatar className="ml-2">
+                              <AvatarFallback>{getDefaultAvatar(user?.username || "User")}</AvatarFallback>
+                            </Avatar>
+                          </div>
+                          
+                          <div className="text-center text-xs text-muted-foreground my-2">
+                            <Separator className="mb-2" />
+                            <span>Today</span>
+                            <Separator className="mt-2" />
+                          </div>
+                          
+                          <div className="flex items-start mb-4">
+                            <Avatar className="mr-2">
+                              <AvatarFallback>SK</AvatarFallback>
+                            </Avatar>
+                            <div className="bg-muted p-2 rounded-md rounded-tl-none">
+                              <p className="text-xs text-muted-foreground mb-1">SnipeKing</p>
+                              <p>I'll handle the sniper position. Let's meet at Observatory.</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex gap-2">
+                          <Input placeholder="Type your message..." className="flex-grow" />
+                          <Button>
+                            <MessageSquare className="h-4 w-4 mr-1" /> Send
+                          </Button>
+                        </div>
+                      </TabsContent>
+                    </Tabs>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card className="glassmorphic">
+                  <CardContent className="p-6 text-center py-16">
+                    <Users className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                    <h2 className="text-xl font-bold mb-2">Select a Team</h2>
+                    <p className="text-muted-foreground mb-4">
+                      {teams && teams.length > 0 
+                        ? "Choose a team from the list to view details" 
+                        : "Create your first team to get started"}
+                    </p>
+                    {(!teams || teams.length === 0) && (
+                      <Button onClick={() => setCreateDialogOpen(true)}>Create Team</Button>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        )}
       </main>
+      
+      {/* Create Team Dialog */}
+      <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-orbitron">Create a New Team</DialogTitle>
+            <DialogDescription>
+              Form a squad to participate in team tournaments and climb the ranks together.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...createTeamForm}>
+            <form onSubmit={createTeamForm.handleSubmit(onCreateTeamSubmit)} className="space-y-4">
+              <FormField
+                control={createTeamForm.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="FireFighters" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Choose a unique name for your team.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={createTeamForm.control}
+                name="tag"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team Tag</FormLabel>
+                    <FormControl>
+                      <Input placeholder="FF" maxLength={5} {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      A short tag (2-5 characters) that represents your team.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={createTeamForm.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description (Optional)</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="We are a competitive squad focused on strategic gameplay and coordination." 
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter>
+                <Button 
+                  type="submit" 
+                  disabled={createTeamMutation.isPending}
+                  className="w-full"
+                >
+                  {createTeamMutation.isPending ? 'Creating...' : 'Create Team'}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Invite Member Dialog */}
+      <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="font-orbitron">Invite Player</DialogTitle>
+            <DialogDescription>
+              Enter a player's username to invite them to your team.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Form {...inviteMemberForm}>
+            <form onSubmit={inviteMemberForm.handleSubmit(onInviteMemberSubmit)} className="space-y-4">
+              <FormField
+                control={inviteMemberForm.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter username" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      The player must have an account on FireFight.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter>
+                <Button 
+                  type="submit" 
+                  disabled={inviteMemberMutation.isPending}
+                  className="w-full"
+                >
+                  {inviteMemberMutation.isPending ? 'Sending Invite...' : 'Send Invite'}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
       
       <Footer />
       <MobileNavbar />

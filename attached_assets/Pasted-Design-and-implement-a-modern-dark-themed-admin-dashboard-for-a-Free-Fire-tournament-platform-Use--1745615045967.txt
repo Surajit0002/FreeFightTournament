@@ -1,0 +1,109 @@
+Design and implement a modern, dark-themed admin dashboard for a Free Fire tournament platform. Use React + TypeScript, Tailwind CSS, React Router, and Headless UI. The dashboard should be responsive and optimized for both desktop and tablet views. Include charts, modals, tables, tab views, dropdowns, and sidebar navigation.
+
+🎮 Visual Style:
+- Gaming dashboard vibe with a modern neon/glass UI
+- Left sticky sidebar with icons (Heroicons or Lucide)
+- Cards, data tables, glow buttons, switch toggles, loaders
+- Notifications with toasts or top alerts
+- Tabbed and collapsible sections
+
+📁 Pages & Features:
+
+1. 🏠 Dashboard Overview
+   - Quick stats cards: Total Tournaments, Active Players, Coins in Wallet, Ongoing Matches
+   - Graphs: Player Growth 📈, Earnings 💰, Participation Trend
+   - Recent Joins & Top Winners table
+   - System alerts and pending actions widget
+
+2. 🏆 Manage Tournaments
+   - List of tournaments with filters: Active, Upcoming, Completed
+   - Add New Tournament (modal or separate page)
+     - Inputs: Title, Mode, Entry Fee, Prize Pool, Map, Start Time, Slots
+   - Edit/Delete tournaments
+   - Publish/Unpublish toggle
+   - View participants per tournament
+   - Push Room ID & Password (after start)
+   - Auto-generate room on time
+
+3. 📜 Match Results
+   - Upload screenshot or CSV
+   - View teams/players
+   - Enter kills, ranks, points manually or bulk upload
+   - Finalize Results (one-click publish)
+   - Leaderboard auto-update trigger
+
+4. 💼 Withdrawals
+   - Player Withdraw Requests
+     - Filters: Pending ✅ / Completed 🟢 / Declined 🔴
+   - View UPI/Paytm details
+   - Approve, Reject, or Hold actions
+   - Status updates, search by username
+
+5. 👥 Players Management
+   - Search & filter players
+   - View profiles: ID, stats, wallet, joined tournaments
+   - Ban / Unban toggle
+   - Coin adjustment tool (Add/Remove)
+   - Chat history, device ID info
+
+6. 🧑‍🤝‍🧑 Teams Management
+   - List all teams
+   - View team members and leader
+   - Remove member or disband team
+   - View team stats: Matches, Win %, Avg kills
+
+7. 💰 Transactions & Wallet Logs
+   - Show all deposits, entry deductions, prizes, withdrawals
+   - Filter by type, date, user
+   - Export to CSV option
+   - Graphs: Coin Flow, Net Revenue
+
+8. 🔔 Push Notifications
+   - Send message to all players or selected IDs
+   - Set category: Info, Match Update, Warning
+   - Display logs of sent alerts
+
+9. 🎖️ Achievements & Rewards
+   - Manage badges and unlockables
+   - Add new task: “Join 5 Tournaments”, “Win 3 Matches”
+   - Reward config (coins/cash/gift)
+
+10. 🛠️ Settings
+    - Admin profile & password
+    - Game modes, default maps, rules config
+    - Tournament auto-close timeout
+    - Referral program settings
+
+11. 📝 Admin Logs & Audit Trail
+    - View activity logs
+    - Track admin actions, match edits, coin adjustments
+
+📦 Demo Data Example
+```ts
+const tournaments = [
+  {
+    id: 101,
+    title: "🔥 Elite Squad Match",
+    mode: "Squad",
+    entryFee: 20,
+    prize: 1500,
+    slots: { filled: 32, total: 50 },
+    map: "Bermuda",
+    status: "Upcoming",
+    startTime: "2025-04-27T17:00:00",
+  },
+  ...
+];
+
+const withdrawals = [
+  {
+    id: 91,
+    username: "PlayerX",
+    amount: 250,
+    method: "UPI",
+    upiId: "playerx@upi",
+    status: "Pending",
+    requestedAt: "2025-04-26T13:45:00",
+  },
+  ...
+];
