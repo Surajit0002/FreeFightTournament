@@ -140,11 +140,12 @@ export default function FeaturedTournaments() {
                     </div>
                   </div>
                   
-                  <Link href={`/tournaments/${tournament.id}`}>
-                    <Button className="w-full py-2 rounded-md font-medium">
-                      Join Now
-                    </Button>
-                  </Link>
+                  <Button 
+                    className="w-full py-2 rounded-md font-medium btn-3d"
+                    onClick={() => window.location.href = `/tournaments/${tournament.id}`}
+                  >
+                    Join Now
+                  </Button>
                 </div>
               </div>
             ))
@@ -157,11 +158,12 @@ export default function FeaturedTournaments() {
       </div>
       
       <div className="text-center mt-8">
-        <Link href="/tournaments">
-          <a className="inline-flex items-center text-primary hover:text-secondary transition-colors font-rajdhani font-medium">
-            View All Tournaments <ArrowRight className="ml-2" size={16} />
-          </a>
-        </Link>
+        <button 
+          onClick={() => window.location.href = "/tournaments"}
+          className="inline-flex items-center text-primary hover:text-secondary transition-colors font-rajdhani font-medium gradient-text animate-text-glow"
+        >
+          View All Tournaments <ArrowRight className="ml-2" size={16} />
+        </button>
       </div>
     </section>
   );
