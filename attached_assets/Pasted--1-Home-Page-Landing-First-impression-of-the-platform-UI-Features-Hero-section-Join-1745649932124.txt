@@ -1,0 +1,247 @@
+🏠 1. Home Page (Landing)
+First impression of the platform.
+
+🧩 UI Features:
+
+🎮 Hero section: “Join Daily Free Fire Tournaments & Win Real Cash!”
+
+🏆 Featured tournaments carousel
+
+🔥 Live/Ongoing matches
+
+🪙 Coin & reward system intro
+
+📱 App download CTA (if available)
+
+💡 How it works: 3-step guide (Join → Play → Win)
+
+Testimonials, YouTube embeds, FAQ
+
+🧑 2. Login / Register
+Secure authentication.
+
+🧩 UI Features:
+
+Email / Password or OTP login
+
+Option for Google Login 🔐
+
+Register form with:
+
+Username, Email, Phone
+
+Referral Code (optional)
+
+Confirm Terms checkbox
+
+Forgot Password flow
+
+Interaction:
+
+Animated form switch (Login ⟷ Signup)
+
+🏆 3. Tournaments Page
+Browse, filter & join tournaments.
+
+🧩 UI Features:
+
+Filters: Mode, Map, Status (Live, Upcoming), Entry (Free/Paid)
+
+Sort: Newest, Prize Pool, Popularity
+
+Tournament Cards:
+
+Title, Mode, Slots (joined/total), Entry Fee, Prize
+
+Button: View Details / Join Now
+
+Badges: 🆓 Free Entry / 💰 Paid / 🔴 Live Now
+
+📄 4. Tournament Detail Page
+Full info of a selected tournament.
+
+🧩 UI Features:
+
+Title, ID, Map, Type, Start Time ⏰
+
+Prize breakdown (1st, 2nd, etc.)
+
+Rules overview
+
+Joined players/teams
+
+Join button with confirmation
+
+Room ID & Password (if released)
+
+Bonus:
+
+Share tournament to WhatsApp/Twitter
+
+Comments/discussion thread (optional)
+
+📜 5. My Matches
+History of user's participation.
+
+🧩 UI Features:
+
+Tabs: Joined / Ongoing / Results
+
+Cards/List:
+
+Match Name, Entry, Time, Status
+
+Result Summary (Rank, Kills, Reward)
+
+View full result breakdown per match
+
+Replay/download button if available
+
+👥 6. Teams & Friends
+Team building and invites.
+
+🧩 UI Features:
+
+My Team: Name, Members, Stats
+
+Invite via Code or Username
+
+Team Stats: Wins, Avg Kills, K/D
+
+Option to leave team / create new
+
+Interactions:
+
+Friend list panel (like chat apps)
+
+Direct challenge: “Invite friend to match”
+
+👤 7. User Profile
+Account & performance overview.
+
+🧩 UI Features:
+
+Avatar, Game Name, UID
+
+Stats: Matches played, Wins, K/D Ratio
+
+Edit profile: Avatar, bio, social links
+
+Referral code sharing section
+
+Badge/Achievement gallery 🏅
+
+💰 8. Wallet Page
+Coins, cash, and earnings.
+
+🧩 UI Features:
+
+Balance cards: Coins 💰 & Real Cash 💵
+
+Tabs:
+
+Transaction history (joined, won, claimed)
+
+Deposit coins (via Razorpay/UPI/etc.)
+
+Withdraw (linked UPI details)
+
+Withdraw Modal:
+
+Amount input
+
+UPI ID input
+
+Confirm → “Under Review” status
+
+🎁 9. Rewards & Achievements
+Unlockables and missions.
+
+🧩 UI Features:
+
+Daily login rewards ✅
+
+Achievement grid:
+
+“Win 5 matches” → 🎖️ Badge + Coins
+
+“Refer 3 friends” → Bonus
+
+Collect button with animation
+
+Countdown timers (for limited-time events)
+
+👨‍💻 10. Support / Help Page
+FAQs and direct support.
+
+🧩 UI Features:
+
+Accordion: FAQ (joining, payment, room ID)
+
+Submit Ticket:
+
+Issue Type
+
+Match ID (optional)
+
+Message box
+
+Screenshot upload
+
+Chat button (if live support)
+
+📨 11. Notifications Page
+All messages and alerts.
+
+🧩 UI Features:
+
+List of system messages:
+
+“Your withdrawal has been approved”
+
+“Room ID updated for Match #231”
+
+Icons per type: ⚠️, ✅, 💰
+
+Clear All, Mark as Read
+
+📥 12. Referrals Page
+Invite friends to earn.
+
+🧩 UI Features:
+
+Show referral code & link
+
+Share buttons (📲 WhatsApp, Telegram, etc.)
+
+Track referral list
+
+Name, Joined Date, Bonus Earned
+
+Progress toward rewards:
+
+“Invite 5 friends = +100 coins”
+
+⚙️ 13. Settings
+Basic account settings.
+
+🧩 UI Features:
+
+Change email/password
+
+Linked accounts (e.g., Google)
+
+UPI details
+
+Notifications toggle
+
+Delete Account ❌
+
+🎨 Optional / Bonus Pages
+
+Page	Purpose
+🔍 Search Tournaments	Keyword/UID-based search + filter
+📈 Public Leaderboard	Rank all players or teams by performance
+🌐 Language Selector	Multi-language toggle (Hindi, English...)
+🎮 Play Area / Scrim	Casual matches not linked to rewards
+📚 Blog / Updates	Guides, news, update notes

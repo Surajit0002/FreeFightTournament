@@ -1,0 +1,165 @@
+Create a fully responsive and highly dynamic Free Fire Tournament Web Application frontend using modern web technologies (Next.js 14 / React 18, Tailwind CSS 3, TypeScript, Zustand or Redux, Framer Motion, and Headless UI).
+
+The Website Must Include:
+
+1. Landing Page (Home)
+Hero section (dynamic tournaments highlight)
+
+"How it Works" steps with animations 🎯
+
+Latest tournaments, top winners 🏆
+
+App download CTA 📲
+
+Footer with social media icons and links
+
+2. Authentication
+Login (Email/OTP + Google OAuth)
+
+Registration (username, email, mobile, referral code)
+
+Forgot Password
+
+3. Tournaments System
+Tournaments Listing (Filterable, Sortable)
+
+Tournament Cards (Dynamic status: Live, Upcoming, Completed)
+
+Detailed Tournament Page (Rules, Prizes, Player Slots, Join Button, Share Link)
+
+Join/Unjoin logic, fee deduction, confirmation modal
+
+4. User Dashboard
+My Matches (History, Ongoing, Results)
+
+Wallet Overview (Coins 💰 + Cash 💵)
+
+Transactions (earn/spend logs)
+
+Withdraw Request system
+
+Achievements & Badges (Earned rewards 🎖️)
+
+Daily Missions / Login rewards
+
+5. Team Management
+Create, Join, Manage Teams
+
+Invite teammates, accept/reject invites
+
+View team stats, win rate, match performance
+
+6. Referral System
+Referral link generator
+
+Track invited friends
+
+Bonus rewards 💎
+
+7. Notifications
+Push Notifications Center 🔔
+
+Live updates: Room ID, Match Result
+
+8. Support & Help Center
+FAQ Accordion UI
+
+Submit Ticket Form (attach screenshot option 📎)
+
+9. Settings
+Profile Edit (Avatar, Nickname, Bio)
+
+UPI / Bank Details for Withdrawals
+
+Language Selector 🌐
+
+Notifications Preferences
+
+10. Public Pages
+Leaderboards (Player Rankings 📊)
+
+Terms of Service, Privacy Policy, Refund Policy
+
+Blog/News Section
+
+11. Admin Dashboard
+Admin Login
+
+Manage Tournaments (CRUD)
+
+Approve/Reject Withdrawals
+
+Push Room Info
+
+Manage Players (Ban/Adjust Wallet)
+
+Manage Teams (Disband, Investigate)
+
+CMS Manager (Banners, Content updates)
+
+Reports & Disputes (View player complaints)
+
+API Logs/Webhooks monitoring
+
+Reward & Achievement Management
+
+Admin Role Management (Create staff roles with permissions)
+
+🎨 UI/UX Requirements:
+Fully mobile responsive (PWA ready)
+
+Smooth page transitions and animations (Framer Motion)
+
+Attractive icons and emojis (Heroicons, Lucide)
+
+Dynamic progress bars (e.g., loading rewards, leaderboard progress)
+
+Toast alerts (Success/Error popups)
+
+Shimmer Skeleton Loaders where needed
+
+Dark Mode 🌙 and Light Mode ☀️ Toggle
+
+Optimized for performance (lazy load images, code splitting)
+
+⚙️ Data Handling:
+Mock demo JSON data (for tournaments, users, matches, transactions)
+
+State management (Zustand or Redux)
+
+Componentized design (reusable UI blocks: buttons, cards, modals, badges)
+
+📂 Deliverables:
+Complete frontend folder structure
+
+Pages, Components, Services, Store, Assets
+
+Proper TypeScript typing/interfaces for all data
+
+Dummy API integration layer (with fake delays for realism)
+
+🧠 Bonus Ideas (optional):
+Spin Wheel for daily bonus 🎡
+
+Lucky Draw Events
+
+Mystery Box Offers
+
+Dynamic Trophies 🏆 on Player Profiles
+
+Share Results to Instagram Stories
+
+📢 Important:
+Follow best practices for accessibility (ARIA tags, alt texts)
+
+SEO optimized pages (meta title, description)
+
+Use Tailwind CSS for consistent spacing, color themes
+
+Animation triggers on scroll into view
+
+Focus on gaming aesthetic: energetic, neon accents, fun typography
+
+🎯 Objective:
+Create a fully dynamic, high-performance, visually engaging Free Fire Tournament Website frontend that feels like a professional gaming app.
+

@@ -1,0 +1,228 @@
+🏠 1. Dashboard (Admin Home)
+📋 Purpose:
+Quick overview of the platform’s health and key metrics.
+
+🧩 UI Components:
+Top Cards (stats):
+
+🔥 Total Tournaments
+
+👥 Active Players
+
+🪙 Coins Circulating
+
+💸 Pending Withdrawals
+
+Charts:
+
+📈 Player Growth (Line Chart)
+
+💰 Daily Earnings (Bar or Pie Chart)
+
+📊 Match Participation Trend
+
+Recent Activities:
+
+Latest joined tournaments
+
+Top winners
+
+Withdraw requests preview
+
+System Alerts:
+
+Upcoming matches
+
+Failed transactions
+
+Room passwords to push
+
+🏆 2. Tournaments Manager
+📋 Purpose:
+Add, edit, delete, or view tournaments.
+
+🧩 UI Features:
+Table with:
+
+Title
+
+Mode (Solo/Duo/Squad)
+
+Map
+
+Entry Fee / Prize
+
+Slots filled
+
+Status (Upcoming/Ongoing/Completed)
+
+Actions: ✏️ Edit, 🗑️ Delete, 🔁 Clone, 🔒 Lock
+
+Add/Edit Modal or Page:
+
+Fields: Name, Mode, Entry Fee, Prize, Map, Time
+
+Slots: Max participants
+
+Settings: Auto start, Auto reward, Rules config
+
+Join Status View:
+
+Participant list with avatars, usernames, team ID
+
+Export player list
+
+Push Room Info:
+
+Room ID, Password
+
+Broadcast to joined players
+
+👥 3. Players Management
+📋 Purpose:
+Monitor and manage player accounts and behavior.
+
+🧩 UI Features:
+Searchable table:
+
+Username, Email
+
+Device ID
+
+Joined Tournaments
+
+Wallet Balance
+
+Status (Active/Banned)
+
+Actions:
+
+View full profile
+
+Ban / Unban user
+
+Adjust wallet (+/- coins/cash)
+
+View match history
+
+Quick Filters:
+
+Most active
+
+Low balance
+
+Banned players
+
+🧑‍🤝‍🧑 4. Teams Management
+📋 Purpose:
+Manage player squads and teams.
+
+🧩 UI Features:
+Team Cards/Table:
+
+Team Name, Leader, Members
+
+Matches Played, Wins
+
+Join date
+
+Team Details View:
+
+Members (with avatar & stats)
+
+Kick/Promote options
+
+Stats chart: K/D Ratio, Win Rate, Avg Placement
+
+Actions:
+
+Disband Team
+
+Invite to Tournaments
+
+Mark for Investigation
+
+💼 5. Withdrawals
+📋 Purpose:
+Handle player withdrawal requests.
+
+🧩 UI Features:
+Table:
+
+User, Amount, UPI ID, Method
+
+Status (Pending, Approved, Rejected)
+
+Request Date
+
+Actions:
+
+✅ Approve
+
+❌ Reject
+
+💬 Message user
+
+View user history
+
+Filters:
+
+Date range, Amount, Status
+
+Export: CSV download
+
+📊 6. Transactions / Wallet Logs
+📋 Purpose:
+Track coin/cash movement inside the system.
+
+🧩 UI Features:
+Transaction List:
+
+User, Type (entry, win, withdrawal, reward), Amount
+
+Timestamp
+
+Filters:
+
+Coins vs Cash
+
+Date range
+
+Type (earn, spend)
+
+Graphs:
+
+Coin Flow (In vs Out)
+
+Top Spenders
+
+Match Earnings Leaderboard
+
+🔔 7. Push Notifications
+📋 Purpose:
+Send updates, alerts, or announcements to users.
+
+🧩 UI Features:
+Compose Notification:
+
+Title, Message
+
+Category (Info, Match Update, Promo)
+
+Target: All / Selected Users / Tournament Participants
+
+Log of Sent Alerts:
+
+Message, Target, Date Sent
+
+Preview UI (how it looks to player)
+
+🧩 BONUS PAGES YOU’LL LIKELY NEED
+
+Page	Purpose
+🎖️ Achievements	Configure unlockables (e.g. win 5 matches = badge)
+🧾 Legal & Static Pages	Edit Terms, Privacy Policy
+💬 Support Tickets	Respond to user-submitted issues or queries
+🧠 AI Reports (Future)	Detect suspicious behavior (high K/D, fast kills)
+🛠️ Settings	Update system-wide values (referral %, etc.)
+🧑‍💻 Admin Users	Create multiple admins with role-based permissions

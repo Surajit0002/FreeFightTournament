@@ -1,0 +1,142 @@
+1. 🧪 Test Matches / Custom Rooms
+Purpose: Create private/custom matches not open to public (for training, influencer events, sponsors, etc.)
+
+UI Features:
+
+Room Name, Map, Mode, Time
+
+Invite specific players (search & add)
+
+Generate Room ID & Password
+
+Mark as "Training", "Scrim", or "Event"
+
+Interactions:
+
+Countdown timer before match start
+
+Logs of who joined, when
+
+2. 🔍 Reports & Disputes
+Purpose: Handle player reports, cheating claims, match issues
+
+UI Features:
+
+List of all reported issues
+
+Filters: Game ID, Type, User, Status
+
+Report Details: Screenshot (📸), Match ID, Description
+
+Actions: Warn / Suspend / Dismiss / Ban
+
+Interactions:
+
+Resolve with notes
+
+View report history by player
+
+3. 🧠 AI-Anti-Cheat Log View (Future Integration)
+Purpose: Visualize logs of suspicious behavior (future backend-powered)
+
+UI Mock:
+
+Player activity timeline
+
+Red flags: Over-accuracy %, High K/D ratios, Fast reflex indicators
+
+Mark "Reviewed" or "Flagged"
+
+4. 🎁 Reward Center (Coupons & Drops)
+Purpose: Manage special coupon drops, coin rewards, promotional codes
+
+UI Features:
+
+Add new promo: Title, Coins/Cash/Gift, Expiry
+
+See all issued coupons
+
+Redeem logs (who used, when, value)
+
+Bonus: Bulk-generate 100+ promo codes
+
+Interaction: QR or short code sharing, status toggle
+
+5. 🧬 API Logs / Webhook Management
+Purpose: Show API hits for external automation or integrations (future-proofing)
+
+UI Features:
+
+Logs: Tournament webhook triggers, withdrawals, Discord Bot logs
+
+Webhook URL & Test Button
+
+Status: Success ✅ / Failed ❌ / Retried 🔄
+
+6. 📊 Leaderboard Config & Reset
+Purpose: Control how the public leaderboard works
+
+UI Features:
+
+Configure scoring system: Points for kill, win, survival
+
+Manual override
+
+Reset Leaderboard (weekly, monthly)
+
+Highlight: Top Players, Weekly Winners
+
+Interactions: Editable leaderboard cards
+
+7. 🧰 App CMS & Banner Manager
+Purpose: Control front-facing homepage banners, announcements, etc.
+
+UI Features:
+
+Upload banners (images/gifs)
+
+Link to tournament, blog, or promo
+
+Announcement bar: set text, icon, type (info/success/warning)
+
+Bonus: Schedule content with start & end time
+
+8. 🧾 Legal & Static Pages Manager
+Purpose: Control content of Terms, Privacy, Refund policy, etc.
+
+UI Features:
+
+Rich text editor with save/publish
+
+Page toggle (active/inactive)
+
+Revision history
+
+9. 💬 Live Chat / Support Requests
+Purpose: Handle direct messages or issues from users
+
+UI Features:
+
+View all support tickets
+
+Assign to admin staff
+
+Chat-like response panel
+
+Tags: Billing, Tournament, Technical, Report
+
+Status: New / Open / Closed / Escalated
+
+10. 🧑‍💻 Admin Roles & Permissions
+Purpose: Add multiple admins with limited access
+
+UI Features:
+
+Role-based access control
+
+Create roles (Manager, Finance, Game Moderator)
+
+Toggle access for each page/module
+
+Security: 2FA Login option
+
