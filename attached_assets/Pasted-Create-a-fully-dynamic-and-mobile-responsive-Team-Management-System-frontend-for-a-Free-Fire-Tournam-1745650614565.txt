@@ -1,0 +1,98 @@
+Create a fully dynamic and mobile-responsive Team Management System frontend for a Free Fire Tournament Website using Next.js 14 (or React 18), TypeScript, Tailwind CSS 3, Zustand or Redux for state management, Framer Motion for animations, and Headless UI components.
+
+🌟 Team Management Must Include:
+1. Create Team Page/Modal
+Input fields: Team Name, Logo Upload, Tagline, Description
+
+Form validation and animated success confirmation
+
+Auto-generate unique Team ID on creation
+
+2. Team Dashboard (Manage Team)
+Display team profile: Logo, Name, Tagline, Creation Date
+
+Player list: avatar, username, role badge, status (Active / Pending)
+
+Role Management (Captain, Sniper, Support, IGL, Entry Fragger, Flex)
+
+Kick Player (Modal Confirmation)
+
+Invite Player: by username or share invite link
+
+View Team Stats (Matches played, Wins, K/D ratio, Synergy score with animated progress bars)
+
+Edit Team Settings (change logo, name, description if Captain)
+
+Leave Team or Disband Team (confirmation modal)
+
+3. Player Invitation System
+Invite via username search or copy/share team invite link
+
+Pending invites list (with "Resend" or "Cancel" options)
+
+Invited users can Accept/Decline invitations from notification center
+
+4. Team Public Profile Page
+Publicly viewable page with team info, players, stats, achievements
+
+5. Dynamic Interactions & Animations
+Smooth page transitions (Framer Motion)
+
+Loading skeletons while fetching team data
+
+Success/error toasts using Headless UI + Tailwind
+
+Animated role badges and status indicators
+
+6. Important Features
+Auto transfer Captain role if the current Captain leaves
+
+Confirmations with nice modals before leaving/kicking/disbanding
+
+Real-time updates when new players join/leave
+
+Notification system for invitations and role changes
+
+Shimmer loading when players list is loading
+
+🎨 UI/UX Guidelines:
+Clean, gaming style UI with vibrant colors and neon accents
+
+Icons (Heroicons/Lucide) + emojis for roles and actions
+
+Responsive mobile-first design
+
+PWA-ready for mobile app-like experience
+
+Dark/Light Mode support
+
+🧩 Data & State Management:
+Dummy JSON data for teams, players, invites
+
+Zustand or Redux slice for managing team state (members, invites, settings)
+
+Mock API services for invite, join, leave, update, disband
+
+📂 Deliverables:
+Full Next.js / React frontend folder structure
+
+Pages: /create-team, /team/[teamId], /team-settings
+
+Components: TeamCard, PlayerCard, RoleBadge, InviteModal, ManageTeamActions
+
+Interfaces: Team, Player, Invite types (TypeScript strict typing)
+
+State management hooks/store
+
+⚡ Bonus (optional but recommended):
+Team Synergy Meter (based on matches played together)
+
+Achievements system (e.g., "Win 10 matches together" 🎖️)
+
+Team Level/XP system
+
+Share Team to Instagram/WhatsApp button
+
+🎯 Goal:
+Build a complete, modern, interactive, dynamic Team Management System optimized for tournament-based gaming websites with real-time team control, smooth UX, and an engaging gaming feel.
+

@@ -434,11 +434,13 @@ function CustomRooms() {
       </div>
 
       <div className="flex items-center gap-4 bg-muted/20 p-4 rounded-lg">
-        <Input 
-          placeholder="Search by name, ID or password..." 
-          className="max-w-sm" 
-          prefixIcon={<Search className="h-4 w-4 text-muted-foreground" />}
-        />
+        <div className="relative max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search by name, ID or password..." 
+            className="pl-9" 
+          />
+        </div>
         <Select defaultValue="all">
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Room Type" />
